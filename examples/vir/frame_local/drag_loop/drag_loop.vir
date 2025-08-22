@@ -1,0 +1,28 @@
+type @a_or_bool = @A | bool 
+
+type @b_or_bool = @B | bool 
+
+class @A 
+    @f : @b_or_bool 
+
+class @B 
+    @f : @a_or_bool 
+
+class @C 
+    @f : @B
+
+func @main() : i32 
+    $true = const bool true 
+    $a = new @A($true)
+    $b = new @B($true) 
+
+    $ref_a_field = ref $a @f 
+    $ref_b_field = ref $b @f 
+
+    $old_ref_a_field = store $ref_a_field $b 
+    $old_ref_b_field = store $ref_b_field $a 
+
+    $c = region rc @C($b)
+
+    $ret_val = const i32 42 
+    ret $ret_val
